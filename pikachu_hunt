@@ -1,0 +1,167 @@
+prompt("Welcome to 'Pikachu Hunt'! \n \nUse the arrow keys to move around the Pokeball. You get 1 point every time the Pokeball touches the Pikachu. Once your score reaches 20, you have captured Pikachu! However, watchout for the rocks. Every time you touch the rock, you lose 1 point from your total health of 100. Good luck!");
+
+//variables used throughout the game
+
+// creates the forest background
+var forest = createSprite(200, 200);
+forest.setAnimation("forest");
+
+// creates the pikachu animation
+var pikachu = createSprite(250, 350);
+pikachu.setAnimation("pikachu");
+pikachu.scale = 0.5;
+
+// creates the pokeball animation
+var pokeball = createSprite (100, 300);
+pokeball.setAnimation("pokeball");
+pokeball.scale = 0.3;
+
+// creates the 3 rocks animation
+var rock = createSprite (100, 100);
+rock.setAnimation("rock");
+rock.scale = 0.6;
+rock.velocityY = 1;
+var rock2 = createSprite(200, 100);
+rock2.setAnimation("rock2");
+rock2.scale = 0.6;
+rock2.velocityY = 1; 
+var rock3 = createSprite(300, 100);
+rock3.setAnimation("rock3");
+rock3.scale = 0.6;
+rock3.velocityY = 1;
+var score = 0;
+var health = 100;
+
+function draw() {
+background("white");
+//Used to check what controls are being pressed. The keys are used to see what direction the pokeball moves. If the rocks go below the screen, they are reset to the top of the screen.
+if (keyDown("up")) {
+  pokeball.y = pokeball.y - 3;
+}
+if (keyDown("down")) {
+  pokeball.y = pokeball.y + 3;
+}
+if (keyDown("left")) {
+  pokeball.x = pokeball.x - 3;
+}
+if (keyDown("right")) {
+  pokeball.x = pokeball.x + 3;
+}
+if (rock.y==375) {
+  rock.y = 75;
+}
+if (rock2.y==375) {
+  rock2.y = 75;
+}
+if (rock3.y==375) {
+  rock3.y = 75;
+}
+
+drawSprites();
+//These conditional statements are used to see if the pokeball is moving out of the screen. If that is the case, then the game automatically ends.
+if (pokeball.x > 400 && score >= 20) {
+background("Pink");
+textSize(26);
+fill("Purple");
+stroke("Black");
+text("You captured Pikachu! You won!", 0, 200);
+}
+if (pokeball.x > 400 && score < 20) {
+background("Pink");
+textSize(20);
+fill("Purple");
+stroke("Black");
+text("Game over. You lose.", 100, 200);
+}
+if (pokeball.x < 0 && score >= 20) {
+background("Pink");
+textSize(26);
+fill("Purple");
+stroke("Black");
+text("You captured Pikachu! You won!", 0, 200);
+}
+if (pokeball.x < 0 && score < 20) {
+background("Pink");
+textSize(20);
+fill("Purple");
+stroke("Black");
+text("Game over. You lose.", 100, 200);
+}
+if (pokeball.y > 400 && score < 20) {
+background("Pink");
+textSize(20);
+fill("Purple");
+stroke("Black");
+text("Game over. You lose.", 100, 200);
+}
+if (pokeball.y > 400 && score >= 20) {
+background("Pink");
+textSize(26);
+fill("Purple");
+stroke("Black");
+text("You captured Pikachu! You won!", 0, 200);
+}
+if (pokeball.y < 0 && score >= 20) {
+background("Pink");
+textSize(26);
+fill("Purple");
+stroke("Black");
+text("You captured Pikachu! You won!", 0, 200);
+}
+if (pokeball.y < 0 && score < 20) {
+background("Pink");
+textSize(20);
+fill("Purple");
+stroke("Black");
+text("Game over. You lose.", 100, 200);
+}
+//Used for the scoring aspect of the game. If the pokeball is touching Pikachu, then the user gets a point and the Pikachu is randomly placed at a different location.
+function count(){
+  if (pokeball.isTouching(pikachu)) {
+  score = score + 1;
+  pikachu.x = randomNumber(0, 400);
+  pikachu.y = randomNumber(0, 400);
+  }
+}
+//calling the function
+count();
+//Here I am seeing if the pokeball is touching the rocks. If that is the case, the health is decreased by 1.
+function move (){
+if (pokeball.isTouching(rock)) {
+health = health - 1;
+}
+if (pokeball.isTouching(rock2)) {
+health = health - 1;
+}
+if (pokeball.isTouching(rock3)) {
+health = health - 1;
+}
+}
+//calling the function
+move();
+//Checking if the health is less than or equal to 0 and the score is less than 20. If that is the case, then the game is over and the person loses. Otherwise, the person wins and captures Pikachu.
+
+if (health <= 0 && score < 20) {
+  background("Pink");
+  textSize(35);
+  fill("Purple");
+  stroke("Black");
+  text("Game Over. You lose.", 43, 200);
+  health = 0;
+}
+if (health <= 0 && score >= 20) {
+  health = 0;
+  background("Pink");
+  textSize(26);
+  fill("Purple");
+  text("You captured Pikachu! You won!", 43, 200);
+  score = score;
+}
+//Showing the scoreboard to the user.
+textSize (30);
+text("Score: ", 240, 50);
+text(score, 330, 50);
+textSize(30);
+text("Health: ", 30, 50);
+text(health, 130, 50);
+}
